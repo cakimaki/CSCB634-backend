@@ -1,4 +1,4 @@
-package org.example.cscb634backend.entity;
+package org.example.cscb634backend.entity.shop;
 
 import jakarta.persistence.*;
 import org.apache.logging.log4j.message.AsynchronouslyFormattable;
@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Table(name= "shop")
 public class Shop {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(name = "name")
