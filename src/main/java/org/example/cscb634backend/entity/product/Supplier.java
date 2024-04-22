@@ -2,6 +2,8 @@ package org.example.cscb634backend.entity.product;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "supplier")
 public class Supplier {
@@ -9,9 +11,12 @@ public class Supplier {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
+	
+	@Column(name= "name")
 	private String name;
 	
-	
+	@OneToMany(mappedBy = "supplier")
+	private List<ProductOffer> productOfferList;
 	public Supplier() {
 	}
 	
