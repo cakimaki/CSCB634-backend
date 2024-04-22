@@ -34,7 +34,7 @@ public class ProductOffer {
 	@Column(name = "available")
 	private boolean available;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "productOffer")
 	private List<Cart> cartList;
 	@ManyToOne
 	@JoinColumn(name = "product_id")
