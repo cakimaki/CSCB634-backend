@@ -3,6 +3,7 @@ package org.example.cscb634backend.entity.product;
 import jakarta.persistence.*;
 import jdk.jfr.Category;
 import org.example.cscb634backend.entity.account.Cart;
+import org.example.cscb634backend.entity.account.PurchaseHistory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +29,12 @@ public class ProductOffer {
 	@Column(name = "discount_end")
 	private LocalDateTime discountEndingDate;
 	
+	@Column(name  = "offer_start")
+	private LocalDateTime offerStart;
+	
+	@Column(name = "offer_end")
+	private LocalDateTime offerEnd;
+	
 	@Column(name = "quantity")
 	private Long quantity;
 	
@@ -36,6 +43,10 @@ public class ProductOffer {
 	
 	@OneToMany(mappedBy = "productOffer")
 	private List<Cart> cartList;
+	
+	@OneToMany(mappedBy = "productOffer")
+	private List<PurchaseHistory> purchaseHistoryList;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
