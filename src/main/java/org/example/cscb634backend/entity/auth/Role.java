@@ -13,8 +13,27 @@ public class Role {
 	@Column(length = 60)
 	private String name;
 	
+	@Column
+	private String description;
+	
+	public Role() {
+	
+	}
+	
+	public Role(String name) {
+		this.name = name;
+	}
+	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public Long getId() {

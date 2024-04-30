@@ -1,9 +1,9 @@
-package org.example.cscb634backend.service;
+package org.example.cscb634backend.service.auth;
 
 
 import org.example.cscb634backend.entity.auth.MyUser;
 import org.example.cscb634backend.entity.auth.Role;
-import org.example.cscb634backend.repository.MyUserRepository;
+import org.example.cscb634backend.repository.auth.MyUserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

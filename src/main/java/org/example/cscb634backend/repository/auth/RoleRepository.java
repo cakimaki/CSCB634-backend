@@ -1,4 +1,4 @@
-package org.example.cscb634backend.repository;
+package org.example.cscb634backend.repository.auth;
 
 import org.example.cscb634backend.entity.auth.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

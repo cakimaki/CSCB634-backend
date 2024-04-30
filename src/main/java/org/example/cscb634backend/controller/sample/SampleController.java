@@ -1,4 +1,4 @@
-package org.example.cscb634backend.controller;
+package org.example.cscb634backend.controller.sample;
 
 
 import org.springframework.web.bind.annotation.GetMapping;

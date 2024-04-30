@@ -22,6 +22,9 @@ public class MyUser {
 	@Column(nullable = true)
 	private String email;
 	
+	@Column(name = "deleted",nullable = false)
+	private boolean deleted;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_roles",
@@ -35,6 +38,14 @@ public class MyUser {
 	
 	@OneToMany(mappedBy = "myUser")
 	private List<Cart> cartList;
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 	
 	public String getUsername() {
 		return username;
