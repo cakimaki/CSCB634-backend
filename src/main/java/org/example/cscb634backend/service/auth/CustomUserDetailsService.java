@@ -21,8 +21,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<MyUser> userOptional = myUserRepository.findByUsername(username);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		Optional<MyUser> userOptional = myUserRepository.findByEmail(email);
 		if(userOptional.isPresent()){
 			MyUser user = userOptional.get();
 			return User.builder()
@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 					.roles(getRoles(user))
 					.build();
 		}else{
-			throw new UsernameNotFoundException("username is not found. - '" + username + "'");
+			throw new UsernameNotFoundException("email is not found. - '" + email + "'");
 		}
 	}
 	

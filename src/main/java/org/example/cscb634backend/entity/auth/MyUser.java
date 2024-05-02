@@ -39,7 +39,7 @@ public class MyUser {
 	@OneToMany(mappedBy = "myUser")
 	private List<Cart> cartList;
 	
-	public boolean isDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 	

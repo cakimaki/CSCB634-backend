@@ -11,13 +11,40 @@ public class Supplier {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	
 	@Column(name= "name")
 	private String name;
 	
+	@Column(name = "solo_posting")
+	private boolean soloPosting;
+	@Column(name = "valid")
+	private boolean valid;
 	@OneToMany(mappedBy = "supplier")
 	private List<ProductOffer> productOfferList;
 	public Supplier() {
+	}
+	
+	public boolean isSoloPosting() {
+		return soloPosting;
+	}
+	
+	public void setSoloPosting(boolean soloPosting) {
+		this.soloPosting = soloPosting;
+	}
+	
+	public boolean isValid() {
+		return valid;
+	}
+	
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+	
+	public List<ProductOffer> getProductOfferList() {
+		return productOfferList;
+	}
+	
+	public void setProductOfferList(List<ProductOffer> productOfferList) {
+		this.productOfferList = productOfferList;
 	}
 	
 	public long getId() {

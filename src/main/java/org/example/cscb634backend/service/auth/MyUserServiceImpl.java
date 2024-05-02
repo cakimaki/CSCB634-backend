@@ -27,9 +27,8 @@ public class MyUserServiceImpl implements MyUserService {
 	@Override
 	public MyUser createUser(MyUserDto dto) {
 		MyUser user = new MyUser();
-		user.setUsername(dto.getUsername());
-		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setEmail(dto.getEmail());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setDeleted(false);
 		List<Role> managedRoles = manageRoles(dto.getRoles());
 		
@@ -39,13 +38,12 @@ public class MyUserServiceImpl implements MyUserService {
 	
 	@Override
 	public MyUser registerUser(MyUserDto dto) {
-		if (dto.getUsername() == null || dto.getPassword() == null || dto.getEmail() == null) {
+		if (dto.getPassword() == null || dto.getEmail() == null) {
 			throw new IllegalArgumentException("Username, password or email must not be null");
 		}
 		MyUser user = new MyUser();
-		user.setUsername(dto.getUsername());
-		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setEmail(dto.getEmail());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setRoleList(manageRoles(getDefaultRole()));
 		user.setDeleted(false);
 		return userRepository.save(user);
@@ -68,12 +66,6 @@ public class MyUserServiceImpl implements MyUserService {
 				return userByEmail.get();
 			}
 		}
-		if (dto.getUsername() != null) {
-			Optional<MyUser> userByUsername = userRepository.findByUsername(dto.getUsername());
-			if (userByUsername.isPresent()) {
-				return userByUsername.get();
-			}
-		}
 		if (dto.getId() != null) {
 			Optional<MyUser> userById = userRepository.findById(dto.getId());
 			if (userById.isPresent()) {
@@ -88,7 +80,9 @@ public class MyUserServiceImpl implements MyUserService {
 				.orElseThrow(() -> new RuntimeException("User with specified id is not found. - " + userId));
 		
 		//update
-		user.setUsername(userDto.getUsername());
+		if(userDto.getEmail()!= null || !(userDto.getEmail().isEmpty())){
+			user.setEmail(userDto.getEmail());
+		}
 		user.setEmail(userDto.getEmail());
 		if (userDto.getPassword() != null || !(user.getPassword().isEmpty())) {
 			user.setPassword(userDto.getPassword());
@@ -103,7 +97,6 @@ public class MyUserServiceImpl implements MyUserService {
 		MyUserDto dto = new MyUserDto();
 		dto.setId(user.getId());
 		dto.setEmail(user.getEmail());
-		dto.setUsername(user.getUsername());
 		dto.setPassword(user.getPassword());
 		dto.setRoles(user.getRoleList());
 		

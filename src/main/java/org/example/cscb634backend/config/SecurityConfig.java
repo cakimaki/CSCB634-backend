@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,13 +28,22 @@ public class SecurityConfig {
 		return httpSecurity
 				.csrf(AbstractHttpConfigurer::disable) //stopped csrf protection (postman)
 				.authorizeHttpRequests(registry -> {
-					registry.requestMatchers("/home","/register/**").permitAll();
+					registry.requestMatchers("/home","/login","/register/**").permitAll();
 					registry.requestMatchers("/admin/**").hasRole("ADMIN");
 					registry.requestMatchers("/moderator/**").hasRole("MODERATOR");
 					registry.requestMatchers("/user/**").hasRole("USER");
 					registry.anyRequest().authenticated(); //all requests authenticated
 				})
-				.formLogin(AbstractAuthenticationFilterConfigurer::permitAll) //form is for all
+				.formLogin(form->form
+						.loginPage("/login")
+						.loginProcessingUrl("/login")
+						.defaultSuccessUrl("/home",true)
+						.permitAll()
+				)
+				.logout(LogoutConfigurer::permitAll
+				)
+				
+				//.formLogin(AbstractAuthenticationFilterConfigurer::permitAll) //form is for all
 				.build();
 	}
 	
