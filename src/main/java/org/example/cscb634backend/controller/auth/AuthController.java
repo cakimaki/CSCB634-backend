@@ -12,13 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/api")
-public class RegistrationController {
+public class AuthController {
 	
 	@Autowired
 	private MyUserService userService;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	@PostMapping("/register")
+	@PostMapping("/perform_register")
 	public ResponseEntity<MyUser> registerUser(@Valid @RequestBody  MyUserDto dto){
 		try{
 			MyUser registeredUser = userService.registerUser(dto);
@@ -27,4 +25,18 @@ public class RegistrationController {
 			throw new RuntimeException("Registering failed.");
 		}
 	}
+	
+	//TODO
+	//  NOT FINISHED.>>>>
+	@PostMapping("/perform_login")
+	public ResponseEntity<MyUser> loginUser(@Valid @RequestBody MyUserDto dto){
+		try{
+			MyUser user = new MyUser();
+			return ResponseEntity.ok(user);
+		}catch(Exception e){
+			throw new RuntimeException();
+		}
+		
+	}
+	
 }

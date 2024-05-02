@@ -32,4 +32,44 @@ public class Product {
 		this.image_url = image_url;
 		this.skuNumber = skuNumber;
 	}
+	
+	public long getId() {
+		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getImage_url() {
+		return image_url;
+	}
+	
+	public void setImage_url(String image_url) {
+		this.image_url = image_url;
+	}
+	
+	public String getSkuNumber() {
+		return skuNumber;
+	}
+	
+	public void setSkuNumber(String skuNumber) {
+		this.skuNumber = skuNumber;
+	}
+	
+	public List<ProductOffer> getProductOfferList() {
+		return productOfferList;
+	}
+	
+	public void setProductOfferList(List<ProductOffer> productOfferList) {
+		this.productOfferList = productOfferList;
+	}
 }

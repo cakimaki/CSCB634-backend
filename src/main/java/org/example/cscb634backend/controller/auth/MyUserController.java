@@ -23,4 +23,6 @@ public class MyUserController {
 			throw new RuntimeException("creation of user failed.");
 		}
 	}
+	
+	
 }

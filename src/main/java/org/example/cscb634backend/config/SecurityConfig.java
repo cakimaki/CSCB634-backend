@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -34,9 +37,19 @@ public class SecurityConfig {
 					registry.requestMatchers("/user/**").hasRole("USER");
 					registry.anyRequest().authenticated(); //all requests authenticated
 				})
+				.cors(cors -> cors
+						.configurationSource(request -> {
+							CorsConfiguration config = new CorsConfiguration();
+							config.setAllowedOrigins(List.of("http://localhost:3000"));
+							config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+							config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+							return config;
+						})
+						
+				)
 				.formLogin(form->form
 						.loginPage("/login")
-						.loginProcessingUrl("/login")
+						.loginProcessingUrl("/perform_login")
 						.defaultSuccessUrl("/home",true)
 						.permitAll()
 				)

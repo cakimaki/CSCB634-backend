@@ -24,7 +24,7 @@ public class RoleController {
 		try {
 			return ResponseEntity.ok(roleService.createRole(roleDto));
 		} catch (Exception e) {
-			throw new InternalException();
+			throw new RuntimeException("role wasnt created...");
 		}
 	}
 }
