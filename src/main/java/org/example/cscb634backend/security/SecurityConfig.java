@@ -19,7 +19,10 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -29,8 +32,9 @@ public class SecurityConfig {
 	private UserDetailsService userDetailsService;
 	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CorsConfigurationSource corsConfigurationSource) throws Exception {
 		return httpSecurity
+				.cors(cors -> cors.configurationSource(corsConfigurationSource)) // Use the defined CORS configuration
 				.csrf(AbstractHttpConfigurer::disable) //stopped csrf protection (postman)
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/perform_register", "/api/auth/perform_register/**", "/home", "/").permitAll()
@@ -44,6 +48,19 @@ public class SecurityConfig {
 						.defaultSuccessUrl("/home", true) // Redirect to home on success
 				)
 				.build();
+	}
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://example.com")); // Add your allowed origins here
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Specify allowed methods
+		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-CSRF-TOKEN"));
+		configuration.setAllowCredentials(true);
+		configuration.setMaxAge(3600L); // How long the response to the pre-flight request can be cached
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration); // Apply CORS configuration to all paths
+		return source;
 	}
 	
 	/*	@Bean
