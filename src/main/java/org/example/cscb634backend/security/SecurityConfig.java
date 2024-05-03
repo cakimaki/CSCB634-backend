@@ -1,4 +1,4 @@
-package org.example.cscb634backend.config;
+package org.example.cscb634backend.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
@@ -26,68 +27,54 @@ import java.util.List;
 public class SecurityConfig {
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity
 				.csrf(AbstractHttpConfigurer::disable) //stopped csrf protection (postman)
-				.authorizeHttpRequests(registry -> {
-					registry.requestMatchers("/home","/login","/register/**").permitAll();
-					registry.requestMatchers("/admin/**").hasRole("ADMIN");
-					registry.requestMatchers("/moderator/**").hasRole("MODERATOR");
-					registry.requestMatchers("/user/**").hasRole("USER");
-					registry.anyRequest().authenticated(); //all requests authenticated
-				})
-				.cors(cors -> cors
-						.configurationSource(request -> {
-							CorsConfiguration config = new CorsConfiguration();
-							config.setAllowedOrigins(List.of("http://localhost:3000"));
-							config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-							config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-							return config;
-						})
-						
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/api/auth/perform_register", "/api/auth/perform_register/**", "/home", "/").permitAll()
+						.requestMatchers("/admin/**").hasRole("ADMIN")
+						.requestMatchers("/moderator/**").hasRole("MODERATOR")
+						.requestMatchers("/user/**").hasRole("USER")
+						.anyRequest().authenticated()
 				)
-				.formLogin(form->form
-						.loginPage("/login")
-						.loginProcessingUrl("/perform_login")
-						.defaultSuccessUrl("/home",true)
-						.permitAll()
+				.formLogin(form -> form
+						.permitAll() // Allow form login
+						.defaultSuccessUrl("/home", true) // Redirect to home on success
 				)
-				.logout(LogoutConfigurer::permitAll
-				)
-				
-				//.formLogin(AbstractAuthenticationFilterConfigurer::permitAll) //form is for all
 				.build();
 	}
 	
-/*	@Bean
-	public UserDetailsService userDetailsService(){
-		UserDetails normalUser = User.builder()
-				.username("gc")
-				.password("$2a$12$UWkJZvySvaSwyz59EIUxC.u8UGGvMIIWOEUEojGstNfmhuWhHnM0W")
-				.roles("USER")
-				.build();
-		UserDetails adminUser = User.builder()
-				.username("admin")
-				.password("$2a$12$5PLtUX88US1M/qydLpTL3Oz0bb9sqb5MUvzdR/aZrDxen4IK3Cwd.")
-				.roles("USER","ADMIN")
-				.build();
-		return new InMemoryUserDetailsManager(normalUser,adminUser);
-	}*/
+	/*	@Bean
+		public UserDetailsService userDetailsService(){
+			UserDetails normalUser = User.builder()
+					.username("gc")
+					.password("$2a$12$UWkJZvySvaSwyz59EIUxC.u8UGGvMIIWOEUEojGstNfmhuWhHnM0W")
+					.roles("USER")
+					.build();
+			UserDetails adminUser = User.builder()
+					.username("admin")
+					.password("$2a$12$5PLtUX88US1M/qydLpTL3Oz0bb9sqb5MUvzdR/aZrDxen4IK3Cwd.")
+					.roles("USER","ADMIN")
+					.build();
+			return new InMemoryUserDetailsManager(normalUser,adminUser);
+		}*/
 	@Bean
-	public UserDetailsService userDetailsService(){
+	public UserDetailsService userDetailsService() {
 		return userDetailsService;
 	}
 	
 	@Bean
-	public AuthenticationProvider authenticationProvider(){
+	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(passwordEncoder());
 		return provider;
 	}
+	
 	@Bean
-	public PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 }

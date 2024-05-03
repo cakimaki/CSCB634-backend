@@ -24,6 +24,13 @@ public class MyUserServiceImpl implements MyUserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 	
+	public MyUser loginUser(MyUserDto dto){
+		MyUser user = new MyUser();
+		
+		
+		
+		return user;
+	}
 	@Override
 	public MyUser createUser(MyUserDto dto) {
 		MyUser user = new MyUser();
@@ -42,6 +49,9 @@ public class MyUserServiceImpl implements MyUserService {
 			throw new IllegalArgumentException("Username, password or email must not be null");
 		}
 		MyUser user = new MyUser();
+		if(userRepository.existsByEmail(dto.getEmail())){
+			throw new IllegalArgumentException("Email has been already registered.");
+		}
 		user.setEmail(dto.getEmail());
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setRoleList(manageRoles(getDefaultRole()));

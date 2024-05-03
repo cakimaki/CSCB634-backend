@@ -13,12 +13,10 @@ import java.util.List;
 public class MyUserDto {
 	private Long id;
 	
-	@NotNull
-	@NotBlank
+	
 	private String email;
 	
-	@NotNull
-	@NotBlank
+	
 	private String password;
 	
 

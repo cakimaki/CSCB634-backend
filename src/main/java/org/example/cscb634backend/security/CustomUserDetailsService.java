@@ -1,4 +1,4 @@
-package org.example.cscb634backend.service.auth;
+package org.example.cscb634backend.security;
 
 
 import org.example.cscb634backend.entity.auth.MyUser;
