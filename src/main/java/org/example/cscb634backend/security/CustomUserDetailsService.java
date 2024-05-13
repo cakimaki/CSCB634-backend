@@ -4,10 +4,12 @@ package org.example.cscb634backend.security;
 import org.example.cscb634backend.entity.auth.MyUser;
 import org.example.cscb634backend.entity.auth.Role;
 import org.example.cscb634backend.repository.auth.MyUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,7 +17,8 @@ import java.util.Optional;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 	private final MyUserRepository myUserRepository;
-	
+
+	@Autowired
 	public CustomUserDetailsService(MyUserRepository myUserRepository) {
 		this.myUserRepository = myUserRepository;
 	}
@@ -26,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		if(userOptional.isPresent()){
 			MyUser user = userOptional.get();
 			return User.builder()
-					.username(user.getUsername())
+					.username(user.getEmail())
 					.password(user.getPassword())
 					.roles(getRoles(user))
 					.build();

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
@@ -30,23 +31,41 @@ import java.util.List;
 public class SecurityConfig {
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CorsConfigurationSource corsConfigurationSource) throws Exception {
-		return httpSecurity
+	public UserDetailsService userDetailsService() {
+		return userDetailsService;
+	}
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(userDetailsService);
+		provider.setPasswordEncoder(passwordEncoder());
+		return provider;
+	}
+	
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
+		return http
 				.cors(cors -> cors.configurationSource(corsConfigurationSource)) // Use the defined CORS configuration
 				.csrf(AbstractHttpConfigurer::disable) //stopped csrf protection (postman)
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/perform_register", "/api/auth/perform_register/**", "/home", "/").permitAll()
-						.requestMatchers("/admin/**").hasRole("ADMIN")
-						.requestMatchers("/moderator/**").hasRole("MODERATOR")
-						.requestMatchers("/user/**").hasRole("USER")
+						.requestMatchers("/api/admin/**").hasRole("ADMIN")
+						.requestMatchers("/api/moderator/**").hasRole("MODERATOR")
+						.requestMatchers("/api/user/**").hasRole("USER")
 						.anyRequest().authenticated()
 				)
-				.formLogin(form -> form
+				.httpBasic(Customizer.withDefaults()
+				)
+			/*	.formLogin(form -> form
 						.permitAll() // Allow form login
 						.defaultSuccessUrl("/home", true) // Redirect to home on success
-				)
+				)*/
 				.build();
 	}
 	@Bean
@@ -77,21 +96,5 @@ public class SecurityConfig {
 					.build();
 			return new InMemoryUserDetailsManager(normalUser,adminUser);
 		}*/
-	@Bean
-	public UserDetailsService userDetailsService() {
-		return userDetailsService;
-	}
-	
-	@Bean
-	public AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setUserDetailsService(userDetailsService);
-		provider.setPasswordEncoder(passwordEncoder());
-		return provider;
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
 }
