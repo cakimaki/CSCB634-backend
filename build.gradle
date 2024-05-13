@@ -24,10 +24,13 @@ dependencies {
 	//jakarta
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+	//validation (dto)
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//oauth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.2.5'
 
 	//mysql
 	implementation 'mysql:mysql-connector-java:8.0.33'

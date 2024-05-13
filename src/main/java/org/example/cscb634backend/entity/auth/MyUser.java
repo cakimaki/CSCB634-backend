@@ -19,7 +19,7 @@ public class MyUser {
 	@Column(nullable = false)
 	private String password;
 	
-	@Column(nullable = true)
+	@Column(nullable = true,unique = true)
 	private String email;
 	
 	@Column(name = "deleted",nullable = false)

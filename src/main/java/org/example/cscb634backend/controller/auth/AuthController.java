@@ -1,6 +1,7 @@
 package org.example.cscb634backend.controller.auth;
 
 import jakarta.validation.Valid;
+import org.example.cscb634backend.dto.auth.LoginResponseDto;
 import org.example.cscb634backend.dto.auth.MyUserDto;
 import org.example.cscb634backend.entity.auth.MyUser;
 import org.example.cscb634backend.service.auth.MyUserService;
@@ -38,14 +39,12 @@ public class AuthController {
 	//TODO
 	//  NOT FINISHED.>>>>
 	@PostMapping("/perform_login")
-	public ResponseEntity<MyUser> loginUser(@Valid @RequestBody MyUserDto dto){
+	public LoginResponseDto loginUser(@Valid @RequestBody MyUserDto dto){
 		try{
-			MyUser user = new MyUser();
-			return ResponseEntity.ok(user);
+			return userService.loginUser(dto.getEmail(),dto.getPassword());
 		}catch(Exception e){
 			throw new RuntimeException();
 		}
-		
 	}
 	
 }

@@ -4,10 +4,11 @@ import org.example.cscb634backend.dto.auth.MyUserDto;
 import org.example.cscb634backend.entity.auth.MyUser;
 import org.example.cscb634backend.service.auth.MyUserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/admin")
+@RestController
+@RequestMapping("/api1/user")
+@CrossOrigin("*")
 public class MyUserController {
 	private final MyUserService myUserService;
 	
@@ -15,7 +16,7 @@ public class MyUserController {
 		this.myUserService = myUserService;
 	}
 	@PostMapping("/create")
-	public ResponseEntity<MyUser> createUser(MyUserDto dto){
+	public ResponseEntity<MyUser> createUser(@RequestBody MyUserDto dto){
 		try {
 			MyUser user = myUserService.createUser(dto);
 			return ResponseEntity.ok(user);
