@@ -3,6 +3,7 @@ package org.example.cscb634backend.dto.product;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.cscb634backend.entity.product.Product;
+import org.example.cscb634backend.entity.product.Supplier;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +19,34 @@ public class ProductOfferDto {
 	private LocalDateTime discount_end;
 	private Long price;
 	
+	private LocalDateTime offerStart;
+	private LocalDateTime offerEnd;
 	private Long quantity;
+	private Supplier supplier;
+	
+	public Supplier getSupplier() {
+		return supplier;
+	}
+	
+	public LocalDateTime getOfferStart() {
+		return offerStart;
+	}
+	
+	public void setOfferStart(LocalDateTime offerStart) {
+		this.offerStart = offerStart;
+	}
+	
+	public LocalDateTime getOfferEnd() {
+		return offerEnd;
+	}
+	
+	public void setOfferEnd(LocalDateTime offerEnd) {
+		this.offerEnd = offerEnd;
+	}
+	
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 	
 	public Product getProduct() {
 		return product;

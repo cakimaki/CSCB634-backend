@@ -42,6 +42,7 @@ public class AuthController {
 	public LoginResponseDto loginUser(@Valid @RequestBody MyUserDto dto){
 		try{
 			return userService.loginUser(dto.getEmail(),dto.getPassword());
+			
 		}catch(Exception e){
 			throw new RuntimeException();
 		}

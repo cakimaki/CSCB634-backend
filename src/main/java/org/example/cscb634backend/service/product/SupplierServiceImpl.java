@@ -1,9 +1,14 @@
 package org.example.cscb634backend.service.product;
 
+import org.example.cscb634backend.dto.auth.MyUserDto;
 import org.example.cscb634backend.dto.product.SupplierDto;
+import org.example.cscb634backend.entity.auth.MyUser;
 import org.example.cscb634backend.entity.product.Supplier;
+import org.example.cscb634backend.repository.auth.MyUserRepository;
 import org.example.cscb634backend.repository.product.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,22 +18,43 @@ import java.util.Optional;
 @Service
 public class SupplierServiceImpl implements SupplierService{
 	private final SupplierRepository supplierRepository;
-	
+	private final MyUserRepository userRepository;
 	@Autowired
-	public SupplierServiceImpl(SupplierRepository supplierRepository) {
+	public SupplierServiceImpl(SupplierRepository supplierRepository, MyUserRepository userRepository) {
 		this.supplierRepository = supplierRepository;
+		this.userRepository = userRepository;
 	}
+	
+
 	
 	@Override
 	public Supplier createSupplier(SupplierDto supplierDto) {
+		Optional<MyUser> userOptional = userRepository.findByEmail(getEmailFromAuth());
+		if(userOptional.isEmpty()){
+			throw new NoSuchElementException("No user found or getemailfromauth is null");
+		}
 		if (supplierDto.getName() == null || supplierDto.getName().trim().isEmpty()) {
 			throw new IllegalArgumentException("No name entered for supplier.");
 		}
 		Supplier supplier = new Supplier();
 		supplier.setName(supplierDto.getName());
-		return supplierRepository.save(supplier);
+		//todo
+		// change in later stages
+		supplier.setSoloPosting(supplierDto.isSoloPosting());
+		supplier.setValid(true);
+		supplierRepository.save(supplier);
+		//set supplier id inside the User entity.
+		MyUser userEntity = userOptional.get();
+		userEntity.setSupplier(supplier);
+		
+		userRepository.save(userEntity);
+		
+		return supplier;
 	}
-	
+	private String getEmailFromAuth(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication.getName();
+	}
 	@Override
 	public List<SupplierDto> getAllSuppliers() {
 		return supplierRepository.findAll().stream().map(this::convertToDto).toList();

@@ -1,17 +1,12 @@
 package org.example.cscb634backend.service.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -39,5 +34,10 @@ public class TokenService {
 				.build();
 		
 		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+	}
+	
+	public String extractEmail(String token) {
+		Jwt jwt = jwtDecoder.decode(token);
+		return jwt.getClaim("sub");
 	}
 }

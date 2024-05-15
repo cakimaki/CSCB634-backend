@@ -3,25 +3,31 @@ package org.example.cscb634backend.dto.auth;
 import org.example.cscb634backend.entity.auth.MyUser;
 
 public class LoginResponseDto {
-	private MyUser user;
+	private String email;
+	private String bearer = "Bearer ";
 	private String jwt;
 	
 	public LoginResponseDto(){
 		super();
 	}
-	public LoginResponseDto(MyUser user, String jwt){
-		this.user = user;
+	public LoginResponseDto(String email, String jwt){
+		this.email=email;
 		this.jwt = jwt;
 		
 	}
 	
-	public MyUser getUser(){
-		return this.user;
+	public String getBearer() {
+		return bearer;
 	}
 	
-	public void setUser(MyUser user){
-		this.user=user;
+	public String getEmail() {
+		return email;
 	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	
 	public String getJwt(){
 		return this.jwt;

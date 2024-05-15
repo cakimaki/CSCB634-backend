@@ -1,6 +1,7 @@
 package org.example.cscb634backend.entity.product;
 
 import jakarta.persistence.*;
+import org.example.cscb634backend.entity.auth.MyUser;
 
 import java.util.List;
 
@@ -20,7 +21,18 @@ public class Supplier {
 	private boolean valid;
 	@OneToMany(mappedBy = "supplier")
 	private List<ProductOffer> productOfferList;
+	
+	@OneToMany(mappedBy = "supplier")
+	private List<MyUser> userList;
 	public Supplier() {
+	}
+	
+	public List<MyUser> getUserList() {
+		return userList;
+	}
+	
+	public void setUserList(List<MyUser> userList) {
+		this.userList = userList;
 	}
 	
 	public boolean isSoloPosting() {

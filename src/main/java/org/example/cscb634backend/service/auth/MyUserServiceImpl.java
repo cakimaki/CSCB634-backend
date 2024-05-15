@@ -90,14 +90,22 @@ public class MyUserServiceImpl implements MyUserService {
 			
 			String token = tokenService.generateJwt(auth);
 			
-			return new LoginResponseDto(userRepository.findByEmail(username).get(), token);
+			return new LoginResponseDto(userRepository.findByEmail(username).get().getEmail(), token);
 			
 		} catch(AuthenticationException e){
 			return new LoginResponseDto(null, "");
 		}
 	}
 	private List<Role> getDefaultRole() {
-		return Collections.singletonList(roleRepository.findByName("USER").orElse(new Role("USER")));
+		String defaultRole = "USER";
+		Optional<Role> optionalRole = roleRepository.findByName(defaultRole);
+		
+		if(optionalRole.isEmpty()){
+		Role newRole = new Role(defaultRole);
+		roleRepository.save(newRole);
+		return Collections.singletonList(newRole);
+		}
+		return Collections.singletonList(optionalRole.get());
 	}
 	
 	@Override

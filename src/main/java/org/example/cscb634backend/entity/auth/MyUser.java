@@ -3,6 +3,7 @@ package org.example.cscb634backend.entity.auth;
 import jakarta.persistence.*;
 import org.example.cscb634backend.entity.account.Cart;
 import org.example.cscb634backend.entity.account.PurchaseHistory;
+import org.example.cscb634backend.entity.product.Supplier;
 
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class MyUser {
 	@Column(name = "deleted",nullable = false)
 	private boolean deleted;
 	
+	@ManyToOne
+	@JoinColumn(name = "supplier_id")
+	private Supplier supplier;
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_roles",
@@ -38,6 +42,18 @@ public class MyUser {
 	
 	@OneToMany(mappedBy = "myUser")
 	private List<Cart> cartList;
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public Supplier getSupplier() {
+		return supplier;
+	}
+	
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 	
 	public boolean getDeleted() {
 		return deleted;

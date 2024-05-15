@@ -45,6 +45,9 @@ public class ProductOffer {
 	@Column(name = "available")
 	private boolean available;
 	
+	@Column(name="approved")
+	private boolean approved;
+	
 	@OneToMany(mappedBy = "productOffer")
 	private List<Cart> cartList;
 	
@@ -58,6 +61,15 @@ public class ProductOffer {
 	@ManyToOne
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
+	
+	
+	public boolean isApproved() {
+		return approved;
+	}
+	
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
 	
 	public Long getId() {
 		return id;
