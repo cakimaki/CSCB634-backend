@@ -10,11 +10,12 @@ import org.example.cscb634backend.repository.product.ProductOfferRepository;
 import org.example.cscb634backend.repository.product.ProductRepository;
 import org.example.cscb634backend.repository.product.SupplierRepository;
 import org.example.cscb634backend.service.auth.TokenService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductOfferServiceImpl implements ProductOfferService {
@@ -50,11 +51,12 @@ public class ProductOfferServiceImpl implements ProductOfferService {
 		}
 		LocalDateTime offerStart = Optional.ofNullable(offerDto.getOfferStart()).orElse(LocalDateTime.now());
 		//Assign the product offer
-		Product product = offerDto.getProduct();
-		productRepository.save(product);
+		//Product product = offerDto.getProduct();
+		//productRepository.save(product);
 		ProductOffer productOffer = new ProductOffer();
-		productOffer.setProduct(offerDto.getProduct());
+		//productOffer.setProduct(offerDto.getProduct());
 		productOffer.setAvailable(offerDto.isAvailable());
+		productOffer.setQuantity(offerDto.getQuantity());
 		productOffer.setPrice(offerDto.getPrice());
 		productOffer.setOfferStart(offerStart);
 		productOffer.setSupplier(supplier);
@@ -66,13 +68,20 @@ public class ProductOfferServiceImpl implements ProductOfferService {
 		return convertToDto(finalProductOffer);
 		
 	}
-	
+	@Override
+	public List<ProductOfferDto> fetchAllValidOffers(){
+		List<ProductOffer> productOfferList = productOfferRepository.getAllValidOffers();
+		return productOfferList.stream()
+				.map(this::convertToDto)
+				.collect(Collectors.toList());
+	}
 	private ProductOfferDto convertToDto(ProductOffer productOffer) {
 		ProductOfferDto dto = new ProductOfferDto();
 		
 		dto.setAvailable(productOffer.isAvailable());
-		dto.setProduct(productOffer.getProduct());
-		dto.setSupplier(productOffer.getSupplier());
+		dto.setOfferStart(productOffer.getOfferStart());
+		//dto.setProduct(productOffer.getProduct());
+		//dto.setSupplier(productOffer.getSupplier());
 		dto.setPrice(productOffer.getPrice());
 		
 		return dto;

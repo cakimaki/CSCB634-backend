@@ -7,10 +7,8 @@ import org.example.cscb634backend.entity.product.Supplier;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 public class ProductOfferDto {
-	private Product product;//name, image, sku
+	private ProductDto product;//name, image, sku
 	
 	private boolean available;
 	
@@ -22,37 +20,13 @@ public class ProductOfferDto {
 	private LocalDateTime offerStart;
 	private LocalDateTime offerEnd;
 	private Long quantity;
-	private Supplier supplier;
+	private SupplierDto supplier;
 	
-	public Supplier getSupplier() {
-		return supplier;
-	}
-	
-	public LocalDateTime getOfferStart() {
-		return offerStart;
-	}
-	
-	public void setOfferStart(LocalDateTime offerStart) {
-		this.offerStart = offerStart;
-	}
-	
-	public LocalDateTime getOfferEnd() {
-		return offerEnd;
-	}
-	
-	public void setOfferEnd(LocalDateTime offerEnd) {
-		this.offerEnd = offerEnd;
-	}
-	
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
-	}
-	
-	public Product getProduct() {
+	public ProductDto getProduct() {
 		return product;
 	}
 	
-	public void setProduct(Product product) {
+	public void setProduct(ProductDto product) {
 		this.product = product;
 	}
 	
@@ -96,11 +70,35 @@ public class ProductOfferDto {
 		this.price = price;
 	}
 	
+	public LocalDateTime getOfferStart() {
+		return offerStart;
+	}
+	
+	public void setOfferStart(LocalDateTime offerStart) {
+		this.offerStart = offerStart;
+	}
+	
+	public LocalDateTime getOfferEnd() {
+		return offerEnd;
+	}
+	
+	public void setOfferEnd(LocalDateTime offerEnd) {
+		this.offerEnd = offerEnd;
+	}
+	
 	public Long getQuantity() {
 		return quantity;
 	}
 	
 	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
+	}
+	
+	public SupplierDto getSupplier() {
+		return supplier;
+	}
+	
+	public void setSupplier(SupplierDto supplier) {
+		this.supplier = supplier;
 	}
 }

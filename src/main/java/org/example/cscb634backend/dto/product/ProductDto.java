@@ -6,9 +6,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductDto {
+	private Long id;
 	private String name;
 	private String imageUrl;
 	private String skuNumber;
+	
+	public ProductDto(Long id,String name, String imageUrl, String skuNumber) {
+		this.name = name;
+		this.imageUrl = imageUrl;
+		this.skuNumber = skuNumber;
+	}
 	
 	public String getName() {
 		return name;

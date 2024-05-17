@@ -7,6 +7,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user/product-offer")
 public class ProductOfferController {
@@ -24,6 +26,16 @@ public class ProductOfferController {
 		}catch(Exception e){
 			e.printStackTrace();
 			throw new RuntimeException();
+		}
+	}
+	
+	@GetMapping("/valid")
+	public ResponseEntity<List<ProductOfferDto>> getAllValidOffers(){
+		try{
+			return ResponseEntity.ok(productOfferService.fetchAllValidOffers());
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("Couldn't get all the valid offers");
 		}
 	}
 }

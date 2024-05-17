@@ -1,6 +1,7 @@
 package org.example.cscb634backend.dto.auth;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -16,7 +17,9 @@ import java.util.List;
 public class MyUserDto {
 	private Long id;
 	
-	
+	@NotNull
+	@NotBlank
+	@Email
 	private String email;
 	
 	@NotNull
@@ -25,6 +28,22 @@ public class MyUserDto {
 	
 
 	private List<Role> roles;
+	
+	public MyUserDto() {
+	}
+	
+	public MyUserDto(Long id, String email, String password, List<Role> roles) {
+		this.id = id;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
+	
+	public MyUserDto(Long id, String email, List<Role> roles) {
+		this.id = id;
+		this.email = email;
+		this.roles = roles;
+	}
 	
 	public Long getId() {
 		return id;
