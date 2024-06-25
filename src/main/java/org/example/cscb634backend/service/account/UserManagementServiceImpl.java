@@ -1,7 +1,6 @@
 package org.example.cscb634backend.service.account;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.example.cscb634backend.dto.auth.MyUserDto;
 import org.example.cscb634backend.dto.auth.MyUserFrontDto;
 import org.example.cscb634backend.entity.auth.MyUser;
 import org.example.cscb634backend.entity.auth.Role;
@@ -20,6 +19,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	private final MyUserRepository userRepository;
 	private final SupplierRepository supplierRepository;
 	private final RoleRepository roleRepository;
+	
 	public UserManagementServiceImpl(MyUserRepository userRepository, SupplierRepository supplierRepository, RoleRepository roleRepository) {
 		this.userRepository = userRepository;
 		this.supplierRepository = supplierRepository;
@@ -27,11 +27,11 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 	
 	@Override
-	public MyUser assignSupplierToUser(Long userId,Long supplierId){
+	public MyUser assignSupplierToUser(Long userId, Long supplierId) {
 		Supplier supplier = supplierRepository.findById(supplierId)
-				.orElseThrow(()->new EntityNotFoundException("User not found with id: " + supplierId));
+				.orElseThrow(() -> new EntityNotFoundException("User not found with id: " + supplierId));
 		MyUser user = userRepository.findById(userId)
-				.orElseThrow(()-> new EntityNotFoundException("Supplier not found with id:" + userId));
+				.orElseThrow(() -> new EntityNotFoundException("Supplier not found with id:" + userId));
 		
 		user.setSupplier(supplier);
 		userRepository.save(user);
@@ -39,12 +39,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 	
 	@Override
-	public MyUserFrontDto assignRoleToUserByIds(Long userId, Long roleId){
+	public MyUserFrontDto assignRoleToUserByIds(Long userId, Long roleId) {
 		//fetch and check if existing
 		MyUser user = userRepository.findById(userId)
-				.orElseThrow(()->new IllegalArgumentException("No user found with such id."));
-		Role roleBeingAdded =  roleRepository.findById(roleId)
-				.orElseThrow(()->new NoSuchElementException("No role found with such id."));
+				.orElseThrow(() -> new IllegalArgumentException("No user found with such id."));
+		Role roleBeingAdded = roleRepository.findById(roleId)
+				.orElseThrow(() -> new NoSuchElementException("No role found with such id."));
 		
 		//the roles list being updated.
 		List<Role> rolesList = user.getRoleList();
@@ -56,8 +56,44 @@ public class UserManagementServiceImpl implements UserManagementService {
 		return convertToFrontDto(user);
 	}
 	
+	@Override
+	public MyUserFrontDto addRoleToUser(String email, String role) {
+		MyUser user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new RuntimeException("User with specified email is not found."));
+		
+		Role roleObject = roleRepository.findByName(role)
+				.orElseThrow(() -> new RuntimeException("Role not found with such name."));
+		//add role
+		if (user.getRoleList().contains(roleObject)) {
+			throw new IllegalArgumentException("Role '" + role + "' has already been asigned to user with email '" + email + "'");
+		}
+		user.getRoleList().add(roleObject);
+		
+		MyUser updatedUser = userRepository.save(user);
+		
+		return convertToFrontDto(updatedUser);
+	}
+	
+	@Override
+	public MyUserFrontDto removeRoleFromUser(String email, String role) {
+		MyUser user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new NoSuchElementException("User with specified email is not found."));
+		Role roleObject = roleRepository.findByName(role)
+				.orElseThrow(() -> new NoSuchElementException("Role with specified name is not found"));
+		
+		if (!user.getRoleList().contains(roleObject)) {
+			throw new NoSuchElementException("Role '" + role + "' is not assigned to user with email '" + email + "'");
+		}
+		
+		user.getRoleList().remove(roleObject);
+		
+		MyUser updatedUser = userRepository.save(user);
+		
+		return convertToFrontDto(updatedUser);
+	}
+	
 	//id email role-list conversion
-	private MyUserFrontDto convertToFrontDto(MyUser user){
+	private MyUserFrontDto convertToFrontDto(MyUser user) {
 		return new MyUserFrontDto(
 				user.getId(),
 				user.getEmail(),

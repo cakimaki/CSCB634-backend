@@ -24,5 +24,14 @@ public class UserManagementController {
 		}
 	}
 	
+	public ResponseEntity<String> removeSupplierFromUser(Long userId, Long supplierId){
+		try{
+			return ResponseEntity.ok("nothing for now");
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+	
 	
 }

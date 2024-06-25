@@ -140,13 +140,14 @@ public class MyUserServiceImpl implements MyUserService {
 		}
 		user.setEmail(userDto.getEmail());
 		if (userDto.getPassword() != null || !(user.getPassword().isEmpty())) {
-			user.setPassword(userDto.getPassword());
+			user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		}
 		if (userDto.getRoles() != null || !(user.getRoleList().isEmpty())) {
 			user.setRoleList(userDto.getRoles());
 		}
 		return user;
 	}
+	
 	
 	private MyUserDto convertToDto(MyUser user) {
 		MyUserDto dto = new MyUserDto();

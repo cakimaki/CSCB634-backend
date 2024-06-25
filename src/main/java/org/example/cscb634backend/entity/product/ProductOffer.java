@@ -48,6 +48,9 @@ public class ProductOffer {
 	@Column(name="approved")
 	private boolean approved;
 	
+	@Column(name = "deleted")
+	private boolean deleted;
+	
 	@OneToMany(mappedBy = "productOffer")
 	private List<Cart> cartList;
 	
@@ -62,6 +65,13 @@ public class ProductOffer {
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
 	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 	
 	public boolean isApproved() {
 		return approved;

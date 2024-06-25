@@ -21,6 +21,15 @@ public class ProductOfferDto {
 	private LocalDateTime offerEnd;
 	private Long quantity;
 	private SupplierDto supplier;
+	private boolean deleted;
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 	
 	public ProductDto getProduct() {
 		return product;

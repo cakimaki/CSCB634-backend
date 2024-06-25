@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class  ProductServiceImpl implements ProductService{
 	private final ProductRepository productRepository;
 	
 	@Autowired
@@ -26,5 +26,13 @@ public class ProductServiceImpl implements ProductService{
 		return productRepository.save(product);
 	}
 	
+	private ProductDto convertToDto(Product product){
+		return new ProductDto(
+				product.getId(),
+				product.getName(),
+				product.getSkuNumber(),
+				product.getImage_url()
+		);
+	}
 	
 }

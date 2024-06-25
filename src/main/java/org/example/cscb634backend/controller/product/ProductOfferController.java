@@ -2,12 +2,14 @@ package org.example.cscb634backend.controller.product;
 
 import org.example.cscb634backend.dto.product.ProductOfferDto;
 import org.example.cscb634backend.service.product.ProductOfferService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/user/product-offer")
@@ -36,6 +38,19 @@ public class ProductOfferController {
 		}catch(Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("Couldn't get all the valid offers");
+		}
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteOffer(@PathVariable Long id) {
+		try {
+			productOfferService.deleteOffer(id);
+			return ResponseEntity.ok("It has been deleted.");
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 }
