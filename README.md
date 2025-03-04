@@ -1,4 +1,3 @@
-# In progress ...
 # Web-Based Retail Management System (Backend)
 
 ## Key Features
